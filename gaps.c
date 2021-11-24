@@ -18,7 +18,7 @@ static void setgaps(int g);
 void
 setgaps(int g)
 {
-	if (g < 0) g = 0;
+	if (g < 1) g = 1;
 
 	selmon->gap = g;
 	arrange(selmon);
