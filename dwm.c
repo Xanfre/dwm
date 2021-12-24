@@ -1733,7 +1733,7 @@ tile(Monitor *m)
 				my += HEIGHT(c) + g;
 		} else {
 			resize(c, sx, sy, sw - (2*c->bw), (sh / sfacts) + ((i - m->nmaster) < srest ? 1 : 0) - (2*c->bw), 0);
-			if (ty + HEIGHT(c) + g < m->wh)
+			if (sy + HEIGHT(c) + g < m->wh)
 				sy += HEIGHT(c) + g;
 		}
 }

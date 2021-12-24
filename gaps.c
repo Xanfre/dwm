@@ -47,7 +47,7 @@ void
 getgaps(Monitor *m, int *g, unsigned int *nc)
 {
 	unsigned int n, e;
-	e = selmon->enablegaps;
+	e = m->enablegaps;
 	Client *c;
 
 	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
