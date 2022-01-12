@@ -139,7 +139,7 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                                    7)
 	TAGKEYS(                        XK_9,                                    8)
 	{ MODKEY,                       XK_w,                    spawn,          {.v = browser } },
-	{ 0,                            XF86XK_Music,            spawn,          {.v = music } },
+	{ 0,                            XF86XK_Tools,            spawn,          {.v = music } },
 	{ 0,                            XF86XK_AudioLowerVolume, spawn,          {.v = voldown } },
 	{ 0,                            XF86XK_AudioRaiseVolume, spawn,          {.v = volup } },
 	{ 0,                            XF86XK_AudioMute,        spawn,          {.v = volmute } },
