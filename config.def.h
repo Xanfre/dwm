@@ -147,7 +147,7 @@ static Key keys[] = {
 	{ 0,                            XF86XK_AudioPrev,        spawn,          {.v = musprev } },
 	{ 0,                            XF86XK_AudioPlay,        spawn,          {.v = muspause } },
 	{ 0,                            XF86XK_AudioNext,        spawn,          {.v = musnext } },
-	{ 0,                            XF86XK_Calculator,       spawn           {.v = calc} },
+	{ 0,                            XF86XK_Calculator,       spawn,          {.v = calc} },
 	{ MODKEY|ShiftMask,             XK_q,                    quit,           {0}  },
 };
 
