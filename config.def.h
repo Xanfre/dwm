@@ -81,9 +81,16 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
-static const char *voldown[] = { "amixer", "sset", "Master", "1-" };
-static const char *volup[] = { "amixer", "sset", "Master", "1+" };
-static const char *volmute[] = { "amixer", "sset", "Master", "toggle" };
+static const char *browser[] = { "firefox", NULL };
+static const char *music[] = { "st", "-e", "cmus",  NULL };
+static const char *voldown[] = { "amixer", "sset", "Master", "1-", NULL };
+static const char *volup[] = { "amixer", "sset", "Master", "1+", NULL };
+static const char *volmute[] = { "amixer", "sset", "Master", "toggle", NULL };
+static const char *musstop[] = { "cmus-remote", "-s", NULL };
+static const char *musprev[] = { "cmus-remote", "-r", NULL };
+static const char *muspause[] = { "cmus-remote", "-u", NULL };
+static const char *musnext[] = { "cmus-remote", "-n", NULL };
+static const char *calc[] = { "speedcrunch", NULL };
 
 static Key keys[] = {
 	/* modifier                     key                      function        argument */
@@ -121,7 +128,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_comma,                tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period,               tagmon,         {.i = +1 } },
 	{ MODKEY|ShiftMask,    	        XK_Return,               togglescratch,  {.ui = 0 } },
-	{ 0,                            XF86XK_Calculator,       togglescratch,  {.ui = 1 } },
+	{ MODKEY,                       XK_apostrophe,           togglescratch,  {.ui = 1 } },
 	TAGKEYS(                        XK_1,                                    0)
 	TAGKEYS(                        XK_2,                                    1)
 	TAGKEYS(                        XK_3,                                    2)
@@ -131,9 +138,16 @@ static Key keys[] = {
 	TAGKEYS(                        XK_7,                                    6)
 	TAGKEYS(                        XK_8,                                    7)
 	TAGKEYS(                        XK_9,                                    8)
+	{ MODKEY,                       XK_w,                    spawn,          {.v = browser } },
+	{ 0,                            XF86XK_Music,            spawn,          {.v = music } },
 	{ 0,                            XF86XK_AudioLowerVolume, spawn,          {.v = voldown } },
 	{ 0,                            XF86XK_AudioRaiseVolume, spawn,          {.v = volup } },
 	{ 0,                            XF86XK_AudioMute,        spawn,          {.v = volmute } },
+	{ 0,                            XF86XK_AudioStop,        spawn,          {.v = musstop } },
+	{ 0,                            XF86XK_AudioPrev,        spawn,          {.v = musprev } },
+	{ 0,                            XF86XK_AudioPlay,        spawn,          {.v = muspause } },
+	{ 0,                            XF86XK_AudioNext,        spawn,          {.v = musnext } },
+	{ 0,                            XF86XK_Calculator,       spawn           {.v = calc} },
 	{ MODKEY|ShiftMask,             XK_q,                    quit,           {0}  },
 };
 
