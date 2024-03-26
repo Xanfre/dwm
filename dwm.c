@@ -39,6 +39,9 @@
 #ifdef XINERAMA
 #include <X11/extensions/Xinerama.h>
 #endif /* XINERAMA */
+#ifdef XFIXES
+#include <X11/extensions/Xfixes.h>
+#endif
 #include <X11/Xft/Xft.h>
 
 #include "drw.h"
@@ -220,6 +223,7 @@ static void togglefloating(const Arg *arg);
 static void togglefullscr(const Arg *arg);
 static void toggletag(const Arg *arg);
 static void toggleview(const Arg *arg);
+static void togglecur(const Arg *arg);
 static void unfocus(Client *c, int setfocus);
 static void unmanage(Client *c, int destroyed);
 static void unmapnotify(XEvent *e);
@@ -269,6 +273,7 @@ static void (*handler[LASTEvent]) (XEvent *) = {
 static Atom wmatom[WMLast], netatom[NetLast];
 static int running = 1;
 static Cur *cursor[CurLast];
+static int showcursor = 1;
 static Clr **scheme;
 static Display *dpy;
 static Drw *drw;
@@ -1658,6 +1663,8 @@ sigchld(int unused)
 void
 spawn(const Arg *arg)
 {
+	if (arg->v == dmenucmd)
+		dmenumon[0] = '0' + selmon->num;
 	if (fork() == 0) {
 		if (dpy)
 			close(ConnectionNumber(dpy));
@@ -1781,6 +1788,15 @@ toggleview(const Arg *arg)
 		focus(NULL);
 		arrange(selmon);
 	}
+}
+
+void
+togglecur(const Arg *arg)
+{
+#ifdef XFIXES
+	showcursor ? XFixesHideCursor(dpy, root) : XFixesShowCursor(dpy, root);
+#endif
+	showcursor = !showcursor;
 }
 
 void
