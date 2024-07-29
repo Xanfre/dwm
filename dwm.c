@@ -72,6 +72,7 @@ enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
 enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
 enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
        ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
+enum { DIR_N, DIR_W, DIR_C, DIR_E, DIR_S, }; /* coordinates for movethrow */
 
 typedef union {
 	int i;
@@ -192,6 +193,8 @@ static void maprequest(XEvent *e);
 static void monocle(Monitor *m);
 static void motionnotify(XEvent *e);
 static void movemouse(const Arg *arg);
+static void moveresize(const Arg *arg);
+static void movethrow(const Arg *arg);
 static Client *nexttiled(Client *c);
 static void pop(Client *c);
 static void propertynotify(XEvent *e);
@@ -1213,6 +1216,85 @@ movemouse(const Arg *arg)
 		selmon = m;
 		focus(NULL);
 	}
+}
+
+void
+moveresize(const Arg *arg)
+{
+	int nh, nw, nx, ny;
+	Client *c;
+	XEvent ev;
+
+	if (!(c = selmon->sel))
+		return;
+	if (c->isfullscreen)
+		return;
+	if (selmon->lt[selmon->sellt]->arrange && !c->isfloating)
+		togglefloating(NULL);
+
+	nx = c->x + ((int *)arg->v)[0];
+	ny = c->y + ((int *)arg->v)[1];
+	nw = c->w + ((int *)arg->v)[2];
+	nh = c->h + ((int *)arg->v)[3];
+	if (nw + c->bw*2 > selmon->ww)
+		nw = selmon->ww - c->bw*2;
+	if (nh + c->bw*2 > selmon->wh)
+		nh = selmon->wh - c->bw*2;
+	if (nx < selmon->wx)
+		nx = selmon->wx;
+	else if (nx + nw + c->bw*2 > selmon->wx + selmon->ww)
+		nx = selmon->wx + selmon->ww - nw - c->bw*2;
+	if (ny < selmon->wy)
+		ny = selmon->wy;
+	else if (ny + nh + c->bw*2 > selmon->wy + selmon->wh)
+		ny = selmon->wy + selmon->wh - nh - c->bw*2;
+	resize(c, nx, ny, nw, nh, True);
+	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, nw/2, nh/2);
+
+	while(XCheckMaskEvent(dpy, EnterWindowMask, &ev));
+}
+
+void
+movethrow(const Arg *arg)
+{
+	int nh, nw, nx, ny;
+	Client *c;
+
+	if (!(c = selmon->sel))
+		return;
+	if (c->isfullscreen)
+		return;
+	if (selmon->lt[selmon->sellt]->arrange && !c->isfloating)
+		togglefloating(NULL);
+
+	nw = c->w;
+	nh = c->h;
+	switch(arg->ui) {
+		case DIR_N:
+			nx = c->x;
+			ny = selmon->wy;
+			break;
+		case DIR_E:
+			nx = selmon->wx + selmon->ww - c->w - c->bw*2;
+			ny = c->y;
+			break;
+		case DIR_S:
+			nx = c->x;
+			ny = selmon->wy + selmon->wh - c->h - c->bw*2;
+			break;
+		case DIR_W:
+			nx = selmon->wx;
+			ny = c->y;
+			break;
+		case DIR_C:
+			nx = selmon->wx + ((selmon->ww - c->w - c->bw*2) / 2);
+			ny = selmon->wy + ((selmon->wh - c->h - c->bw*2) / 2);
+			break;
+		default:
+			return;
+	}
+	resize(c, nx, ny, nw, nh, True);
+	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, nw/2, nh/2);
 }
 
 Client *

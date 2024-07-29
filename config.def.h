@@ -72,7 +72,6 @@ static const char *termcmdtab[]  = { "tabbed", "-o", col_gray1, "-O", col_gray3,
 static const char *disploff[] = { "xset", "dpms", "force", "off", NULL };
 static const char *displlock[] = { "slock", NULL };
 static const char *browser[] = { "librewolf", NULL };
-static const char *music[] = { "st", "-e", "cmus",  NULL };
 static const char *voldown[] = { "amixer", "sset", "Master", "1-", NULL };
 static const char *volup[] = { "amixer", "sset", "Master", "1+", NULL };
 static const char *volmute[] = { "amixer", "sset", "Master", "toggle", NULL };
@@ -80,7 +79,6 @@ static const char *musstop[] = { "cmus-remote", "-s", NULL };
 static const char *musprev[] = { "cmus-remote", "-r", NULL };
 static const char *muspause[] = { "cmus-remote", "-u", NULL };
 static const char *musnext[] = { "cmus-remote", "-n", NULL };
-static const char *calc[] = { "speedcrunch", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key                      function        argument */
@@ -96,6 +94,19 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_o,                    incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,                    setmfact,       {.f = -0.01} },
 	{ MODKEY,                       XK_l,                    setmfact,       {.f = +0.01} },
+	{ MODKEY|ShiftMask,             XK_j,                    moveresize,     {.v = (int[]){ 0, 10, 0, 0} } },
+	{ MODKEY|ShiftMask,             XK_k,                    moveresize,     {.v = (int[]){ 0, -10, 0, 0} } },
+	{ MODKEY|ShiftMask,             XK_h,                    moveresize,     {.v = (int[]){ -10, 0, 0, 0} } },
+	{ MODKEY|ShiftMask,             XK_l,                    moveresize,     {.v = (int[]){ 10, 0, 0, 0} } },
+	{ MODKEY|ControlMask,           XK_j,                    moveresize,     {.v = (int[]){ 0, 0, 0, 10} } },
+	{ MODKEY|ControlMask,           XK_k,                    moveresize,     {.v = (int[]){ 0, 0, 0, -10} } },
+	{ MODKEY|ControlMask,           XK_h,                    moveresize,     {.v = (int[]){ 0, 0, -10, 0} } },
+	{ MODKEY|ControlMask,           XK_l,                    moveresize,     {.v = (int[]){ 0, 0, 10, 0} } },
+	{ MODKEY|ControlMask|ShiftMask, XK_j,                    movethrow,      {.ui = DIR_S } },
+	{ MODKEY|ControlMask|ShiftMask, XK_k,                    movethrow,      {.ui = DIR_N } },
+	{ MODKEY|ControlMask|ShiftMask, XK_h,                    movethrow,      {.ui = DIR_W } },
+	{ MODKEY|ControlMask|ShiftMask, XK_l,                    movethrow,      {.ui = DIR_E } },
+	{ MODKEY|ControlMask|ShiftMask, XK_m,                    movethrow,      {.ui = DIR_C } },
 	{ MODKEY|ShiftMask,             XK_Tab,                  zoom,           {0} },
 	{ MODKEY,                       XK_equal,                incrgaps,       {.i = +1 } },
 	{ MODKEY,                       XK_minus,                incrgaps,       {.i = -1 } },
@@ -131,7 +142,6 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                                    7)
 	TAGKEYS(                        XK_9,                                    8)
 	{ MODKEY,                       XK_w,                    spawn,          {.v = browser } },
-	{ 0,                            XF86XK_Tools,            spawn,          {.v = music } },
 	{ 0,                            XF86XK_AudioLowerVolume, spawn,          {.v = voldown } },
 	{ 0,                            XF86XK_AudioRaiseVolume, spawn,          {.v = volup } },
 	{ 0,                            XF86XK_AudioMute,        spawn,          {.v = volmute } },
@@ -139,7 +149,6 @@ static const Key keys[] = {
 	{ 0,                            XF86XK_AudioPrev,        spawn,          {.v = musprev } },
 	{ 0,                            XF86XK_AudioPlay,        spawn,          {.v = muspause } },
 	{ 0,                            XF86XK_AudioNext,        spawn,          {.v = musnext } },
-	{ 0,                            XF86XK_Calculator,       spawn,          {.v = calc} },
 	{ MODKEY|ShiftMask,             XK_q,                    quit,           {0}  },
 };
 
