@@ -71,6 +71,8 @@ static const char *termcmd[]  = { "st", NULL };
 static const char *termcmdtab[]  = { "tabbed", "-o", col_gray1, "-O", col_gray3, "-t", col_cyan, "-T", col_gray4, "-r", "2", "st", "-w", "''",  NULL };
 static const char *disploff[] = { "xset", "dpms", "force", "off", NULL };
 static const char *displlock[] = { "slock", NULL };
+static const char *status[] = { "instance", "slstatus", "-10", NULL };
+static const char *findcur[] = { "instance", "find-cursor", "-s", "150", "-d", "50", "-w", "1000", "-g", "-o", NULL };
 static const char *browser[] = { "librewolf", NULL };
 static const char *voldown[] = { "amixer", "sset", "Master", "1-", NULL };
 static const char *volup[] = { "amixer", "sset", "Master", "1+", NULL };
@@ -87,6 +89,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Return,               spawn,          {.v = termcmdtab } },
 	{ MODKEY,                       XK_BackSpace,            spawn,          {.v = disploff } },
 	{ MODKEY,                       XK_BackSpace,            spawn,          {.v = displlock } },
+	{ MODKEY,                       XK_grave,                spawn,          {.v = status } },
 	{ MODKEY,                       XK_b,                    togglebar,      {0} },
 	{ MODKEY,                       XK_j,                    focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,                    focusstack,     {.i = -1 } },
@@ -141,6 +144,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7,                                    6)
 	TAGKEYS(                        XK_8,                                    7)
 	TAGKEYS(                        XK_9,                                    8)
+	{ MODKEY,                       XK_s,                    spawn,          {.v = findcur } },
 	{ MODKEY,                       XK_w,                    spawn,          {.v = browser } },
 	{ 0,                            XF86XK_AudioLowerVolume, spawn,          {.v = voldown } },
 	{ 0,                            XF86XK_AudioRaiseVolume, spawn,          {.v = volup } },
