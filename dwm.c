@@ -23,6 +23,9 @@
 #include <errno.h>
 #include <locale.h>
 #include <signal.h>
+#ifdef SPAWN
+#include <spawn.h>
+#endif
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -281,6 +284,11 @@ static Display *dpy;
 static Drw *drw;
 static Monitor *mons, *selmon;
 static Window root, wmcheckwin;
+
+/* externals */
+#ifdef SPAWN
+extern char **environ;
+#endif
 
 /* configuration, allows nested code to access above variables */
 #include "config.h"
@@ -1753,10 +1761,33 @@ showhide(Client *c)
 void
 spawn(const Arg *arg)
 {
+#ifdef SPAWN
+	posix_spawn_file_actions_t act;
+	posix_spawnattr_t attr;
+	sigset_t set;
+	pid_t pid;
+#else
 	struct sigaction sa;
+#endif
 
 	if (arg->v == dmenucmd)
 		dmenumon[0] = '0' + selmon->num;
+#ifdef SPAWN
+	if (!dpy || posix_spawn_file_actions_init(&act) == 0) {
+		if ((!dpy || posix_spawn_file_actions_addclose(&act, ConnectionNumber(dpy)) == 0)
+			&& posix_spawnattr_init(&attr) == 0) {
+			sigemptyset(&set);
+			sigaddset(&set, SIGCHLD);
+			posix_spawnattr_setsigdefault(&attr, &set);
+			posix_spawnattr_setflags(&attr, POSIX_SPAWN_SETSIGDEF|POSIX_SPAWN_SETSID);
+			posix_spawnp(&pid, ((char **)arg->v)[0], &act, &attr,
+				(char **)arg->v, environ);
+			posix_spawnattr_destroy(&attr);
+		}
+		if (dpy)
+			posix_spawn_file_actions_destroy(&act);
+	}
+#else
 	if (fork() == 0) {
 		if (dpy)
 			close(ConnectionNumber(dpy));
@@ -1770,6 +1801,7 @@ spawn(const Arg *arg)
 		execvp(((char **)arg->v)[0], (char **)arg->v);
 		die("dwm: execvp '%s' failed:", ((char **)arg->v)[0]);
 	}
+#endif
 }
 
 void
