@@ -71,12 +71,12 @@ static const char *termcmd[]  = { "st", NULL };
 static const char *termcmdtab[]  = { "tabbed", "-o", col_gray1, "-O", col_gray3, "-t", col_cyan, "-T", col_gray4, "-r", "2", "st", "-w", "''",  NULL };
 static const char *disploff[] = { "xset", "dpms", "force", "off", NULL };
 static const char *displlock[] = { "slock", NULL };
+static const char *sleepcmd[] = { "doas", "zzz", NULL };
 static const char *status[] = { "instance", "slstatus", "-10", NULL };
 static const char *findcur[] = { "instance", "find-cursor", "-s", "150", "-d", "50", "-w", "1000", "-g", "-o", NULL };
-static const char *browser[] = { "librewolf", NULL };
-static const char *voldown[] = { "amixer", "sset", "Master", "1-", NULL };
-static const char *volup[] = { "amixer", "sset", "Master", "1+", NULL };
-static const char *volmute[] = { "amixer", "sset", "Master", "toggle", NULL };
+static const char *voldown[] = { "amixer", "sset", "PCM", "1-", NULL };
+static const char *volup[] = { "amixer", "sset", "PCM", "1+", NULL };
+static const char *volmute[] = { "amixer", "sset", "IEC958", "toggle", NULL };
 static const char *musstop[] = { "cmus-remote", "-s", NULL };
 static const char *musprev[] = { "cmus-remote", "-r", NULL };
 static const char *muspause[] = { "cmus-remote", "-u", NULL };
@@ -89,6 +89,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Return,               spawn,          {.v = termcmdtab } },
 	{ MODKEY,                       XK_BackSpace,            spawn,          {.v = disploff } },
 	{ MODKEY,                       XK_BackSpace,            spawn,          {.v = displlock } },
+	{ MODKEY|ShiftMask,             XK_BackSpace,            spawn,          {.v = sleepcmd } },
 	{ MODKEY,                       XK_grave,                spawn,          {.v = status } },
 	{ MODKEY,                       XK_b,                    togglebar,      {0} },
 	{ MODKEY,                       XK_j,                    focusstack,     {.i = +1 } },
@@ -145,7 +146,6 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                                    7)
 	TAGKEYS(                        XK_9,                                    8)
 	{ MODKEY,                       XK_s,                    spawn,          {.v = findcur } },
-	{ MODKEY,                       XK_w,                    spawn,          {.v = browser } },
 	{ 0,                            XF86XK_AudioLowerVolume, spawn,          {.v = voldown } },
 	{ 0,                            XF86XK_AudioRaiseVolume, spawn,          {.v = volup } },
 	{ 0,                            XF86XK_AudioMute,        spawn,          {.v = volmute } },
@@ -161,7 +161,7 @@ static const Key keys[] = {
 static const Button buttons[] = {
 	/* click                event mask      button          function        argument */
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
-	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
+	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[7]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
