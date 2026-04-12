@@ -1077,6 +1077,8 @@ manage(Window w, XWindowAttributes *wa)
 		applyrules(c);
 	}
 
+	c->x -= borderpx;
+	c->y -= borderpx;
 	if (c->x + WIDTH(c) > c->mon->wx + c->mon->ww)
 		c->x = c->mon->wx + c->mon->ww - WIDTH(c);
 	if (c->y + HEIGHT(c) > c->mon->wy + c->mon->wh)
